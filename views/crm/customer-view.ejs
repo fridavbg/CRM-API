@@ -1,0 +1,28 @@
+<%- include("../partials/header.ejs", {title: title}); %>
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+<div class="content">
+    <h1>Customers</h1>
+    <a href="/crm/create">
+        <button>Create Customer</button>
+    </a>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Birthdate</th>
+        </tr>
+        <tr>
+            <td><%= json.name %></td>
+            <td><%= json.surname %></td>
+            <td><%= json.email %></td>
+            <td><%= json.birthdate %></td>
+        </tr>
+    </table>
+    <br />
+    <a href="/crm/customers" class="link">Go back</a>
+</div>
+
+<%- include("../partials/footer.ejs"); %>

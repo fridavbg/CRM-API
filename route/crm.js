@@ -58,7 +58,7 @@ router.get("/crm/create", async (req, res) => {
 });
 
 /**
- * PRODUCT ROUTE
+ * Customer ROUTE
  * /crm/create/:
  *   post:
  *     summary: Post information of a customer
@@ -73,6 +73,24 @@ router.post("/crm/create", urlencodedParser, async (req, res) => {
     // })
 
     res.redirect(`/crm/customers`);
+});
+
+/**
+ * PRODUCT ROUTE
+ * /crm/customers/show/:id
+ *   post:
+ *     summary: Show information of One customer
+ *     description: CRUD - Display information for One customer
+ */
+router.get("/crm/customers/show/:id", async (req, res) => {
+    let id = req.params.id;
+    let data = {
+        title: `Customer | ${id} ${sitename}`,
+        json: customersJson[id-1],
+    };
+    console.log(customersJson[id]);
+    
+    res.render(`crm/customer-view`, data);
 });
 
 module.exports = router;
