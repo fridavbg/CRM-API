@@ -1,0 +1,8 @@
+{
+    "customer1" : {
+        "name": "Frida",
+        "surname": "Persson",
+        "email": "fperssontech@gmail.com",
+        "birthdate": "1900-01-01"
+        }
+}
