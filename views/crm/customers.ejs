@@ -1,0 +1,39 @@
+<%- include("../partials/header.ejs", {title: title}); %>
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+<div class="content">
+    <h1>Customers</h1>
+    <p>No customers has been added</p>
+    <a href="/crm/create">
+        <button>Create Customer</button>
+    </a>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Birthdate</th>
+        </tr>
+        <% for (const row of json) { %>
+        <tr>
+            <td><%= row.name %></td>
+            <td><%= row.surname %></td>
+            <td><%= row.email %> st</td>
+            <td><%= row.birthdate %></td>
+            <td>
+                <a
+                    href="/crm/customers/show/<%= row.id  %> "
+                    class="link"
+                >
+                Edit
+                </a>
+            </td>
+        </tr>
+        <% }; %>
+    </table>
+    <br />
+<p>TABLE</p>
+</div>
+
+<%- include("../partials/footer.ejs"); %>
