@@ -8,6 +8,7 @@ const router = express.Router();
 const fs = require("fs");
 // const customers = require("../src/crm");
 const customersJson = require("../data/customer.json");
+customersJson;
 const bodyParser = require("body-parser");
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const sitename = "Customer relationship management API";
@@ -28,10 +29,10 @@ router.get("/crm/index", (req, res) => {
 });
 
 /**
- * INDEX ROUTE
+ * CUSTOMERS ROUTE
  * /crm/customers:
  *   get:
- *     summary: Display customer information
+ *     summary: Display All customer information
  *     description: Render customer page
  */
 router.get("/crm/customers", async (req, res) => {
@@ -58,25 +59,30 @@ router.get("/crm/create", async (req, res) => {
 });
 
 /**
- * Customer ROUTE
+ * CREATE ROUTE
  * /crm/create/:
  *   post:
  *     summary: Post information of a customer
  *     description: CRUD - CREATE information for a produkt
  */
-router.post("/crm/create", urlencodedParser, async (req, res) => {
+router.post("/crm/create", async (req, res) => {
     console.log(JSON.stringify(req.body, null, 4));
 
-    // fs.writeFile('../data/customer.json', JSON.stringify(req.body, null, 4), 'utf-8', function(err) {
-    //     if (err) throw err
-    //     console.log('JSON file updated successfully!')
-    // })
+    fs.writeFile(
+        "customer.json",
+        JSON.stringify(req.body, null, 4),
+        "utf-8",
+        function (err) {
+            if (err) throw err;
+            console.log("JSON file updated successfully!");
+        }
+    );
 
     res.redirect(`/crm/customers`);
 });
 
 /**
- * PRODUCT ROUTE
+ * SHOW ROUTE
  * /crm/customers/show/:id
  *   post:
  *     summary: Show information of One customer
@@ -86,11 +92,45 @@ router.get("/crm/customers/show/:id", async (req, res) => {
     let id = req.params.id;
     let data = {
         title: `Customer | ${id} ${sitename}`,
-        json: customersJson[id-1],
+        json: customersJson[id - 1],
     };
     console.log(customersJson[id]);
-    
+
     res.render(`crm/customer-view`, data);
+});
+
+/**
+ * UPDATE ROUTE
+ * /crm/customers/update/:id
+ *   post:
+ *     summary: Update information of One customer
+ *     description: CRUD - Update information for One customer
+ */
+router.get("/crm/customers/update/:id", async (req, res) => {
+    let id = req.params.id;
+    let data = {
+        title: `Customer | ${id} ${sitename}`,
+        json: customersJson[id - 1],
+    };
+
+    res.render(`crm/customer-update`, data);
+});
+
+/**
+ * DELETE ROUTE
+ * /crm/customers/delete/:id
+ *   post:
+ *     summary: Update information of One customer
+ *     description: CRUD - Update information for One customer
+ */
+router.get("/crm/customers/delete/:id", async (req, res) => {
+    let id = req.params.id;
+    let data = {
+        title: `Customer | ${id} ${sitename}`,
+        json: customersJson[id - 1],
+    };
+
+    res.render(`crm/customer-delete`, data);
 });
 
 module.exports = router;
