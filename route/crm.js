@@ -66,7 +66,6 @@ router.get("/crm/create", async (req, res) => {
  *     description: CRUD - CREATE information for a produkt
  */
 router.post("/crm/create", urlencodedParser, async (req, res) => {
-    // console.log(JSON.stringify(req.body, null, 4));
     const customer = {
         id: customersJson.length + 1,
         name: req.body.name,
@@ -113,6 +112,26 @@ router.get("/crm/customers/update/:id", async (req, res) => {
     };
 
     res.render(`crm/customer-update`, data);
+});
+
+/**
+ * UPDATE ROUTE
+ * /crm/customers/update/:id
+ *   post:
+ *     summary: Update information of One customer
+ *     description: CRUD - Update information for One customer
+ */
+router.post("/crm/update", urlencodedParser, async (req, res) => {
+    const id = req.body.id;
+
+    const customer = customersJson.find((c) => c.id === parseInt(id));
+
+    customer.name = req.body.name;
+    customer.surname = req.body.surname;
+    customer.email = req.body.email;
+    customer.birthdate = req.body.birthdate;
+
+    res.redirect(`/crm/customers`);
 });
 
 /**
