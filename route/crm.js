@@ -6,12 +6,12 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
-// const customers = require("../src/crm");
-const customersJson = require("../data/customer.json");
-customersJson;
+// const customersJson = require("../data/customer.json");
 const bodyParser = require("body-parser");
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const sitename = "Customer relationship management API";
+
+const customersJson = [];
 
 /**
  * INDEX ROUTE
@@ -65,18 +65,17 @@ router.get("/crm/create", async (req, res) => {
  *     summary: Post information of a customer
  *     description: CRUD - CREATE information for a produkt
  */
-router.post("/crm/create", async (req, res) => {
-    console.log(JSON.stringify(req.body, null, 4));
+router.post("/crm/create", urlencodedParser, async (req, res) => {
+    // console.log(JSON.stringify(req.body, null, 4));
+    const customer = {
+        id: customersJson.length + 1,
+        name: req.body.name,
+        surname: req.body.surname,
+        email: req.body.email,
+        birthdate: req.body.birthdate,
+    };
 
-    fs.writeFile(
-        "customer.json",
-        JSON.stringify(req.body, null, 4),
-        "utf-8",
-        function (err) {
-            if (err) throw err;
-            console.log("JSON file updated successfully!");
-        }
-    );
+    customersJson.push(customer);
 
     res.redirect(`/crm/customers`);
 });
