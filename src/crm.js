@@ -146,7 +146,6 @@ async function deleteCustomer(req, res) {
 
     res.redirect(`/crm/customers`);
 }
-
 module.exports = {
     index: index,
     getCustomers: getCustomers,
