@@ -23,7 +23,7 @@ body {
     background-image: linear-gradient(
         -60deg,
         rgb(5, 5, 5) 50%,
-        rgb(195, 8, 8) 50%
+        rgb(41, 98, 57) 50%
     );
     bottom: 0;
     left: -50%;
@@ -100,7 +100,8 @@ p {
 /* IMAGE */
 
 .img {
-    width: 500px;
+    width: 400px;
+    border-radius: 1em;
 }
 
 
