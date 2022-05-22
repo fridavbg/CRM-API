@@ -5,13 +5,9 @@
 
 const express = require("express");
 const router = express.Router();
-const fs = require("fs");
-// const customersJson = require("../data/customer.json");
 const bodyParser = require("body-parser");
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
-const sitename = "Customer relationship management API";
-
-const customersJson = [];
+const customers = require("../src/crm");
 
 /**
  * INDEX ROUTE
@@ -20,13 +16,7 @@ const customersJson = [];
  *     summary: Display welcome page
  *     description: Render welcome page
  */
-router.get("/crm/index", (req, res) => {
-    let data = {
-        title: `Welcome  ${sitename}`,
-    };
-
-    res.render("crm/", data);
-});
+router.get("/crm/index", customers.index);
 
 /**
  * CUSTOMERS ROUTE
@@ -35,13 +25,8 @@ router.get("/crm/index", (req, res) => {
  *     summary: Display All customer information
  *     description: Render customer page
  */
-router.get("/crm/customers", async (req, res) => {
-    let data = {
-        title: `Customers |  ${sitename}`,
-        json: customersJson,
-    };
-    res.render("crm/customers", data);
-});
+
+router.get("/crm/customers", customers.getCustomers);
 
 /**
  * CREATE ROUTE
@@ -50,13 +35,7 @@ router.get("/crm/customers", async (req, res) => {
  *     summary: Display form to create a customer
  *     description: CRUD - Create information of a customer
  */
-router.get("/crm/create", async (req, res) => {
-    let data = {
-        title: `Create account ${sitename}`,
-    };
-
-    res.render("crm/customer-create", data);
-});
+router.get("/crm/create", customers.getCustomerForm);
 
 /**
  * CREATE ROUTE
@@ -65,25 +44,7 @@ router.get("/crm/create", async (req, res) => {
  *     summary: Post information of a customer
  *     description: CRUD - CREATE information for a produkt
  */
-router.post("/crm/create", urlencodedParser, async (req, res) => {
-    const customer = {
-        id: customersJson.length + 1,
-        name: req.body.name,
-        surname: req.body.surname,
-        email: req.body.email,
-        birthdate: req.body.birthdate,
-    };
-
-    if (!customer) {
-        res.status(404).send(
-            "Please provide full information in order to create a customer"
-        );
-    }
-
-    customersJson.push(customer);
-
-    res.redirect(`/crm/customers`);
-});
+router.post("/crm/create", urlencodedParser, customers.createCustomer);
 
 /**
  * SHOW ROUTE
@@ -92,21 +53,7 @@ router.post("/crm/create", urlencodedParser, async (req, res) => {
  *     summary: Show information of One customer
  *     description: CRUD - Display information for One customer
  */
-router.get("/crm/customers/show/:id", async (req, res) => {
-    let id = req.params.id;
-
-    if (!id) {
-        res.status(404).send("No customer with that id exists");
-    }
-
-    let data = {
-        title: `Customer | ${id} ${sitename}`,
-        json: customersJson[id - 1],
-    };
-    console.log(customersJson[id]);
-
-    res.render(`crm/customer-view`, data);
-});
+router.get("/crm/customers/show/:id", customers.getCustomerById);
 
 /**
  * UPDATE ROUTE
@@ -115,20 +62,7 @@ router.get("/crm/customers/show/:id", async (req, res) => {
  *     summary: Update information of One customer
  *     description: CRUD - Update information for One customer
  */
-router.get("/crm/customers/update/:id", async (req, res) => {
-    let id = req.params.id;
-
-    if (!id) {
-        res.status(404).send("No customer with that id exists");
-    }
-
-    let data = {
-        title: `Customer | ${id} ${sitename}`,
-        json: customersJson[id - 1],
-    };
-
-    res.render(`crm/customer-update`, data);
-});
+router.get("/crm/customers/update/:id", customers.getUpdateForm);
 
 /**
  * UPDATE ROUTE
@@ -137,22 +71,7 @@ router.get("/crm/customers/update/:id", async (req, res) => {
  *     summary: Update information of One customer
  *     description: CRUD - Update information for One customer
  */
-router.post("/crm/update", urlencodedParser, async (req, res) => {
-    const id = req.body.id;
-
-    const customer = customersJson.find((c) => c.id === parseInt(id));
-
-    if (!customer) {
-        res.status(404).send("No customer with that id exists");
-    }
-
-    customer.name = req.body.name;
-    customer.surname = req.body.surname;
-    customer.email = req.body.email;
-    customer.birthdate = req.body.birthdate;
-
-    res.redirect(`/crm/customers`);
-});
+router.post("/crm/update", urlencodedParser, customers.updateCustomer);
 
 /**
  * DELETE ROUTE
@@ -161,19 +80,7 @@ router.post("/crm/update", urlencodedParser, async (req, res) => {
  *     summary: Update information of One customer
  *     description: CRUD - Update information for One customer
  */
-router.get("/crm/customers/delete/:id", async (req, res) => {
-    let id = req.params.id;
-
-    if (!id) {
-        res.status(404).send("No customer with that id exists");
-    }
-    let data = {
-        title: `Customer | ${id} ${sitename}`,
-        json: customersJson[id - 1],
-    };
-
-    res.render(`crm/customer-delete`, data);
-});
+router.get("/crm/customers/delete/:id", customers.getDeleteForm);
 
 /**
  * DELETE ROUTE
@@ -182,20 +89,6 @@ router.get("/crm/customers/delete/:id", async (req, res) => {
  *     summary: Delete information of One customer
  *     description: CRUD - Delete information for One customer
  */
-router.post("/crm/delete", urlencodedParser, async (req, res) => {
-    const id = req.body.id;
-
-    const customer = customersJson.find((c) => c.id === parseInt(id));
-
-    const index = customersJson.indexOf(customer);
-
-    if (!customer) {
-        res.status(404).send("No customer with that id exists");
-    }
-
-    customersJson.splice(index, 1);
-
-    res.redirect(`/crm/customers`);
-});
+router.post("/crm/delete", urlencodedParser, customers.deleteCustomer);
 
 module.exports = router;
