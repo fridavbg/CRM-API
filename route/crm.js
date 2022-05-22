@@ -74,6 +74,12 @@ router.post("/crm/create", urlencodedParser, async (req, res) => {
         birthdate: req.body.birthdate,
     };
 
+    if (!customer) {
+        res.status(404).send(
+            "Please provide full information in order to create a customer"
+        );
+    }
+
     customersJson.push(customer);
 
     res.redirect(`/crm/customers`);
@@ -88,6 +94,11 @@ router.post("/crm/create", urlencodedParser, async (req, res) => {
  */
 router.get("/crm/customers/show/:id", async (req, res) => {
     let id = req.params.id;
+
+    if (!id) {
+        res.status(404).send("No customer with that id exists");
+    }
+
     let data = {
         title: `Customer | ${id} ${sitename}`,
         json: customersJson[id - 1],
@@ -106,6 +117,11 @@ router.get("/crm/customers/show/:id", async (req, res) => {
  */
 router.get("/crm/customers/update/:id", async (req, res) => {
     let id = req.params.id;
+
+    if (!id) {
+        res.status(404).send("No customer with that id exists");
+    }
+
     let data = {
         title: `Customer | ${id} ${sitename}`,
         json: customersJson[id - 1],
@@ -126,6 +142,10 @@ router.post("/crm/update", urlencodedParser, async (req, res) => {
 
     const customer = customersJson.find((c) => c.id === parseInt(id));
 
+    if (!customer) {
+        res.status(404).send("No customer with that id exists");
+    }
+
     customer.name = req.body.name;
     customer.surname = req.body.surname;
     customer.email = req.body.email;
@@ -137,18 +157,45 @@ router.post("/crm/update", urlencodedParser, async (req, res) => {
 /**
  * DELETE ROUTE
  * /crm/customers/delete/:id
- *   post:
+ *   get:
  *     summary: Update information of One customer
  *     description: CRUD - Update information for One customer
  */
 router.get("/crm/customers/delete/:id", async (req, res) => {
     let id = req.params.id;
+
+    if (!id) {
+        res.status(404).send("No customer with that id exists");
+    }
     let data = {
         title: `Customer | ${id} ${sitename}`,
         json: customersJson[id - 1],
     };
 
     res.render(`crm/customer-delete`, data);
+});
+
+/**
+ * DELETE ROUTE
+ * /crm/customers/delete/
+ *   post:
+ *     summary: Delete information of One customer
+ *     description: CRUD - Delete information for One customer
+ */
+router.post("/crm/delete", urlencodedParser, async (req, res) => {
+    const id = req.body.id;
+
+    const customer = customersJson.find((c) => c.id === parseInt(id));
+
+    const index = customersJson.indexOf(customer);
+
+    if (!customer) {
+        res.status(404).send("No customer with that id exists");
+    }
+
+    customersJson.splice(index, 1);
+
+    res.redirect(`/crm/customers`);
 });
 
 module.exports = router;

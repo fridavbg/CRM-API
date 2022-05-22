@@ -4,21 +4,53 @@
 <div class="bg bg3"></div>
 <div class="content">
     <h1>Customer</h1>
-    <form class="label-left" method="put" action="/crm/update">
+    <form class="label-left" method="post" action="/crm/delete">
         <fieldset>
-            <legend>Update customer</legend>
+            <legend>Delete customer</legend>
 
+            <input
+                id="id"
+                type="text"
+                name="id"
+                value="<%= json.id %>"
+                hidden
+            />
+            
             <label for="name">name</label>
-            <input id="name" type="text" name="name" value="<%= json.name %>" readonly/>
+            <input
+                id="name"
+                type="text"
+                name="name"
+                value="<%= json.name %>"
+                readonly
+            />
 
             <label for="surname">surname</label>
-            <input id="surname" type="text" name="surname" value="<%= json.surname %>" readonly/>
+            <input
+                id="surname"
+                type="text"
+                name="surname"
+                value="<%= json.surname %>"
+                readonly
+            />
 
             <label for="email">email</label>
-            <input id="email" type="text" name="email" value="<%= json.email %>" readonly/>
+            <input
+                id="email"
+                type="text"
+                name="email"
+                value="<%= json.email %>"
+                readonly
+            />
 
             <label for="birthdate">birthdate</label>
-            <input id="birthdate" type="date" name="birthdate" value="<%= json.birthdate %>" readonly/>
+            <input
+                id="birthdate"
+                type="date"
+                name="birthdate"
+                value="<%= json.birthdate %>"
+                readonly
+            />
 
             <input
                 class="link"
